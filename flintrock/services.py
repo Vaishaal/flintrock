@@ -246,12 +246,12 @@ class Spark(FlintrockService):
                         rm -f /tmp/install-spark.sh
                     """.format(url=shlex.quote(url)))
             else:
+                print("POTATO")
                 ssh_check_output(
                     client=ssh_client,
                     command="""
                         set -e
-                        sudo yum install -y git
-                        sudo yum install -y java-devel
+                        sudo pacman --noconfirm -S git
                         """)
                 ssh_check_output(
                     client=ssh_client,
@@ -354,6 +354,8 @@ class Spark(FlintrockService):
             raise
 
         # TODO: Don't print here. Return this and let the caller print.
+        print("Master IP : " + master_host)
+        print("Master UI : " + spark_master_ui)
         print(textwrap.dedent(
             """\
             Spark Health Report:

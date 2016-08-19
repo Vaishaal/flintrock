@@ -204,7 +204,7 @@ def cli(cli_context, config, provider):
               type=click.Path(exists=True, dir_okay=False),
               help="Path to SSH .pem file for accessing nodes.")
 @click.option('--ec2-instance-type', default='m3.medium', show_default=True)
-@click.option('--ec2-region', default='us-east-1', show_default=True)
+@click.option('--ec2-region', default='us-west-2', show_default=True)
 # We set some of these defaults to empty strings because of boto3's parameter validation.
 # See: https://github.com/boto/boto3/issues/400
 @click.option('--ec2-availability-zone', default='')

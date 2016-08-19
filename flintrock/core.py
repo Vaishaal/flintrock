@@ -148,7 +148,7 @@ class FlintrockCluster:
             manifest_raw = ssh_check_output(
                 client=master_ssh_client,
                 command="""
-                    cat /home/{u}/.flintrock-manifest.json
+                    cat /{u}/.flintrock-manifest.json
                 """.format(u=shlex.quote(user)))
             # TODO: Reconsider where this belongs. In the manifest? We can implement
             #       ephemeral storage support as a Flintrock service, and add methods to
@@ -411,7 +411,7 @@ def provision_cluster(
         ssh_check_output(
             client=master_ssh_client,
             command="""
-                echo {m} > /home/{u}/.flintrock-manifest.json
+                echo {m} > /{u}/.flintrock-manifest.json
             """.format(
                 m=shlex.quote(json.dumps(manifest, indent=4, sort_keys=True)),
                 u=shlex.quote(user)))
@@ -485,7 +485,6 @@ def provision_node(
         cluster.storage_dirs.root = storage_dirs['root']
         cluster.storage_dirs.ephemeral = storage_dirs['ephemeral']
 
-        # The default CentOS AMIs on EC2 don't come with Java installed.
         java_home = ssh_check_output(
             client=client,
             command="""
@@ -499,9 +498,8 @@ def provision_node(
                 client=client,
                 command="""
                     set -e
-
-                    sudo yum install -y java-1.7.0-openjdk
-                    sudo sh -c "echo export JAVA_HOME=/usr/lib/jvm/jre >> /etc/environment"
+                    sudo pacman --noconfirm -S jre8-openjdk-headless
+                    sudo sh -c "echo export JAVA_HOME=/usr/lib/jvm/java-8-openjdk/jre >> /etc/environment"
                     source /etc/environment
                 """)
 
